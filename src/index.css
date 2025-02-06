@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: public_sans;
   line-height: 1.5;
   font-weight: 400;
 
@@ -13,4 +13,16 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: "public_sans";
+  src: url("./assets/font/PublicSans-Bold.ttf");
+}
+
+@media (max-width: 480px) {
+  @font-face {
+    font-family: "public_sans";
+    src: url("./assets/font/PublicSans-ExtraBold.ttf");
+  }
 }
