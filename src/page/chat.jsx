@@ -38,7 +38,15 @@ const Chat = () => {
     setLoading(true);
 
     try {
-      const aiResponse = await getAIResponse(message, selectedModel);
+      const recentMessages = [...chatHistory, newMessage]
+        .slice(-3)
+        .map((msg) => ({
+          role: msg.type === "user" ? "user" : "assistant",
+          content: msg.text,
+        }));
+
+      const aiResponse = await getAIResponse(recentMessages, selectedModel);
+
       const fullText =
         aiResponse?.choices?.[0]?.message?.content || "No response";
 
@@ -70,7 +78,7 @@ const Chat = () => {
             return updated;
           });
         }
-      }, 50);
+      }, 40);
     } catch (error) {
       console.error("Error fetching AI response:", error);
     } finally {
@@ -84,7 +92,7 @@ const Chat = () => {
 
   return (
     <section className="flex flex-col h-dvh relative">
-      <nav className="flex items-center p-4 rounded-b-md gap-3 z-20 bg-white shadow-md md:shadow-none">
+      <nav className="flex items-center p-4 rounded-b-md gap-3 z-20 bg-white shadow-md md:shadow-none md:hidden">
         <button
           onClick={() => setIsSidebarOpen(true)}
           className="cursor-pointer md:hidden"

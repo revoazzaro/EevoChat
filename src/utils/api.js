@@ -55,8 +55,12 @@ export default class AIHandler {
     }
   }
 
-  async getAIResponse(message, model = "meta-llama/Llama-2-70b-chat-hf") {
+  async getAIResponse(messages, model = "meta-llama/Llama-2-70b-chat-hf") {
     try {
+      const formattedMessages = Array.isArray(messages)
+        ? messages
+        : [{ role: "user", content: messages }];
+
       const requestInit = {
         headers: {
           accept: "application/json",
@@ -68,7 +72,13 @@ export default class AIHandler {
         referrerPolicy: "strict-origin-when-cross-origin",
         body: JSON.stringify({
           model,
-          messages: [{ role: "user", content: message }],
+          messages: [
+            ...formattedMessages,
+            {
+              role: "system",
+              content: `Kamu adalah asisten AI buatan Revo dengan model ${model}. Kalau ditanya 'siapa kamu', jawab dengan memperkenalkan dirimu.`,
+            },
+          ],
           format: "markdown",
         }),
         method: "POST",
